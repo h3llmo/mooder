@@ -1,0 +1,68 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Fly.io — Production deployment (ADR-014)
+# App:    mooder-backend
+# Region: ams (Amsterdam, EU — closest to target users, GDPR-compliant ADR-012)
+#
+# Deploy:  fly deploy
+# Secrets: fly secrets set DB_PASSWORD=... OIDC_CLIENT_SECRET=...
+# Logs:    fly logs --app mooder-backend
+# ─────────────────────────────────────────────────────────────────────────────
+
+app            = "mooder-backend"
+primary_region = "ams"
+
+[build]
+  dockerfile = "Dockerfile"
+
+# ── Static environment (non-secret) ──────────────────────────────────────────
+[env]
+  MOODER_ENV          = "prod"
+  # Impersonation hard-disabled in prod — 5-layer enforcement (ADR-006)
+  IMPERSONATE_ENABLED = "false"
+  OTEL_ENABLED        = "true"
+
+# ── HTTP service ──────────────────────────────────────────────────────────────
+[http_service]
+  internal_port          = 8080
+  force_https            = true
+  auto_stop_machines     = true
+  auto_start_machines    = true
+  min_machines_running   = 0
+
+  [http_service.concurrency]
+    type       = "connections"
+    hard_limit = 25
+    soft_limit = 20
+
+# ── Machine sizing ────────────────────────────────────────────────────────────
+[[vm]]
+  memory   = "512mb"
+  cpu_kind = "shared"
+  cpus     = 1
+
+# ── Health checks ─────────────────────────────────────────────────────────────
+[[services.http_checks]]
+  interval     = "15s"
+  grace_period = "30s"
+  method       = "GET"
+  path         = "/q/health/ready"
+  protocol     = "http"
+  timeout      = "10s"
+
+[[services.tcp_checks]]
+  grace_period  = "30s"
+  interval      = "15s"
+  restart_limit = 0
+  timeout       = "5s"
+
+# ── Secrets to configure via CLI (never commit values) ────────────────────────
+# fly secrets set \
+#   DB_HOST=<managed-pg-host>         \
+#   DB_PORT=5432                       \
+#   DB_USER=mooder                     \
+#   DB_PASSWORD=<secret>               \
+#   DB_NAME=mooder                     \
+#   OIDC_SERVER_URL=https://mooder.eu.auth0.com/ \
+#   OIDC_CLIENT_ID=mooder-backend      \
+#   OIDC_CLIENT_SECRET=<secret>        \
+#   OTEL_EXPORTER_OTLP_ENDPOINT=https://otlp-gateway-prod-eu-west-0.grafana.net/otlp

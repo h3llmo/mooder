@@ -1,0 +1,6 @@
+# Don't deploy these to Vercel
+.env
+.env.local
+node_modules
+.next
+Dockerfile

@@ -1,0 +1,212 @@
+{
+  "id": "mooder",
+  "realm": "mooder",
+  "displayName": "Mooder",
+  "displayNameHtml": "<b>Mooder</b>",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": false,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": false,
+  "accessTokenLifespan": 300,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+
+  "roles": {
+    "realm": [
+      {
+        "id": "r-user",
+        "name": "user",
+        "description": "Standard application user",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "id": "r-admin",
+        "name": "admin",
+        "description": "Platform administrator",
+        "composite": false,
+        "clientRole": false
+      }
+    ]
+  },
+
+  "clients": [
+    {
+      "clientId": "mooder-backend",
+      "name": "Mooder Backend",
+      "description": "Quarkus resource server — validates bearer tokens",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "mooder-backend-secret",
+      "bearerOnly": true,
+      "publicClient": false,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "protocol": "openid-connect"
+    },
+    {
+      "clientId": "mooder-desktop",
+      "name": "Mooder Desktop (BFF)",
+      "description": "Next.js BFF client — confidential, issues tokens server-side only",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "mooder-desktop-secret",
+      "bearerOnly": false,
+      "publicClient": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "protocol": "openid-connect",
+      "redirectUris": [
+        "http://localhost/*",
+        "http://localhost:80/*",
+        "http://localhost:3000/*"
+      ],
+      "webOrigins": [
+        "http://localhost",
+        "http://localhost:80",
+        "http://localhost:3000"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      },
+      "protocolMappers": [
+        {
+          "name": "phone_number",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "phone",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "phone_number",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "name": "locale",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "locale",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "locale",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "name": "roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "roles",
+            "jsonType.label": "String",
+            "multivalued": "true"
+          }
+        }
+      ]
+    }
+  ],
+
+  "users": [
+    {
+      "id": "a0000000-0000-0000-0000-000000000001",
+      "username": "alice.martin",
+      "firstName": "Alice",
+      "lastName": "Martin",
+      "email": "alice.martin@mooder.local",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "phone": ["+33 6 12 34 56 78"],
+        "locale": ["fr-FR"]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "mooder123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["user"]
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000002",
+      "username": "thomas.dubois",
+      "firstName": "Thomas",
+      "lastName": "Dubois",
+      "email": "thomas.dubois@mooder.local",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "phone": ["+33 6 98 76 54 32"],
+        "locale": ["fr-FR"]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "mooder123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["user"]
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000003",
+      "username": "sofia.garcia",
+      "firstName": "Sofia",
+      "lastName": "Garcia",
+      "email": "sofia.garcia@mooder.local",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "phone": ["+34 6 55 44 33 22"],
+        "locale": ["es-ES"]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "mooder123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["user"]
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000099",
+      "username": "admin",
+      "firstName": "Mooder",
+      "lastName": "Admin",
+      "email": "admin@mooder.local",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "locale": ["en-US"]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["user", "admin"]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "roles": [
+    {
+      "id": "user",
+      "label": "User",
+      "description": "Standard application user. Can access chat, view their own insights and manage their privacy settings.",
+      "permissions": [
+        "chat:read",
+        "chat:write",
+        "insights:read:own",
+        "privacy:read:own",
+        "privacy:write:own"
+      ]
+    },
+    {
+      "id": "admin",
+      "label": "Administrator",
+      "description": "Platform administrator. Can manage users, roles, and platform configuration.",
+      "permissions": [
+        "chat:read",
+        "chat:write",
+        "insights:read:own",
+        "privacy:read:own",
+        "privacy:write:own",
+        "admin:users:read",
+        "admin:users:write",
+        "admin:roles:read",
+        "admin:roles:write"
+      ]
+    }
+  ]
+}

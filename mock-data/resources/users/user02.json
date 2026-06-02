@@ -1,0 +1,23 @@
+{
+  "id": "a0000000-0000-0000-0000-000000000002",
+  "username": "thomas.dubois",
+  "firstName": "Thomas",
+  "lastName": "Dubois",
+  "email": "thomas.dubois@mooder.local",
+  "dateOfBirth": "1990-09-03",
+  "phone": "+33 6 98 76 54 32",
+  "locale": "fr-FR",
+  "timezone": "Europe/Paris",
+  "avatarColor": "#0891B2",
+  "roles": ["user"],
+  "profile": {
+    "bio": "Software tinkerer by day, jazz guitarist by night. Dad of two.",
+    "city": "Bordeaux",
+    "country": "France"
+  },
+  "preferences": {
+    "notifications": false,
+    "theme": "dark",
+    "language": "fr"
+  }
+}

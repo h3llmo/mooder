@@ -1,0 +1,40 @@
+# ── Java / Maven ──────────────────────────────────────────
+target/
+*.class
+*.jar
+*.war
+*.ear
+.mvn/
+!.mvn/wrapper/maven-wrapper.properties
+
+# ── Quarkus ───────────────────────────────────────────────
+**/target/
+**/.quarkus/
+
+# ── Node / Next.js ────────────────────────────────────────
+node_modules/
+.next/
+out/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── Environment / secrets ─────────────────────────────────
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# ── IDE ───────────────────────────────────────────────────
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ── Docker volumes (if accidentally created locally) ──────
+postgres-data/
+grafana-data/

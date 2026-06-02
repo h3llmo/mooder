@@ -1,0 +1,23 @@
+{
+  "id": "a0000000-0000-0000-0000-000000000001",
+  "username": "alice.martin",
+  "firstName": "Alice",
+  "lastName": "Martin",
+  "email": "alice.martin@mooder.local",
+  "dateOfBirth": "1997-04-12",
+  "phone": "+33 6 12 34 56 78",
+  "locale": "fr-FR",
+  "timezone": "Europe/Paris",
+  "avatarColor": "#7C3AED",
+  "roles": ["user"],
+  "profile": {
+    "bio": "Coffee addict. Amateur photographer. Loves hiking on weekends.",
+    "city": "Lyon",
+    "country": "France"
+  },
+  "preferences": {
+    "notifications": true,
+    "theme": "light",
+    "language": "fr"
+  }
+}

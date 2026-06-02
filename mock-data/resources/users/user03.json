@@ -1,0 +1,23 @@
+{
+  "id": "a0000000-0000-0000-0000-000000000003",
+  "username": "sofia.garcia",
+  "firstName": "Sofia",
+  "lastName": "Garcia",
+  "email": "sofia.garcia@mooder.local",
+  "dateOfBirth": "2000-01-28",
+  "phone": "+34 6 55 44 33 22",
+  "locale": "es-ES",
+  "timezone": "Europe/Madrid",
+  "avatarColor": "#DC2626",
+  "roles": ["user"],
+  "profile": {
+    "bio": "Design student. Passionate about UX and sustainable fashion.",
+    "city": "Barcelona",
+    "country": "Spain"
+  },
+  "preferences": {
+    "notifications": true,
+    "theme": "light",
+    "language": "es"
+  }
+}

@@ -1,0 +1,69 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Fly.io — Staging deployment (ADR-014)
+# App:    mooder-backend-stg
+# Region: ams (Amsterdam, EU)
+#
+# Deploy:  fly deploy --config fly.stg.toml
+# Secrets: fly secrets set --app mooder-backend-stg DB_PASSWORD=... ...
+# Logs:    fly logs --app mooder-backend-stg
+# ─────────────────────────────────────────────────────────────────────────────
+
+app            = "mooder-backend-stg"
+primary_region = "ams"
+
+[build]
+  dockerfile = "Dockerfile"
+
+# ── Static environment (non-secret) ──────────────────────────────────────────
+[env]
+  MOODER_ENV          = "stg"
+  # Impersonation on staging: requires BOTH this flag AND a valid IMPERSONATE_APPROVAL_TOKEN
+  # (30-min TTL, audit-logged — ADR-006). Never set to true without approval token.
+  IMPERSONATE_ENABLED = "false"
+  OTEL_ENABLED        = "true"
+
+# ── HTTP service ──────────────────────────────────────────────────────────────
+[http_service]
+  internal_port          = 8080
+  force_https            = true
+  auto_stop_machines     = true
+  auto_start_machines    = true
+  min_machines_running   = 0
+
+  [http_service.concurrency]
+    type       = "connections"
+    hard_limit = 10
+    soft_limit = 8
+
+# ── Machine sizing (smaller than prod) ───────────────────────────────────────
+[[vm]]
+  memory   = "256mb"
+  cpu_kind = "shared"
+  cpus     = 1
+
+# ── Health checks ─────────────────────────────────────────────────────────────
+[[services.http_checks]]
+  interval     = "20s"
+  grace_period = "40s"
+  method       = "GET"
+  path         = "/q/health/ready"
+  protocol     = "http"
+  timeout      = "10s"
+
+[[services.tcp_checks]]
+  grace_period  = "40s"
+  interval      = "20s"
+  restart_limit = 0
+  timeout       = "5s"
+
+# ── Secrets to configure via CLI ─────────────────────────────────────────────
+# fly secrets set --app mooder-backend-stg \
+#   DB_HOST=<managed-pg-host-stg>           \
+#   DB_PORT=5432                             \
+#   DB_USER=mooder                           \
+#   DB_PASSWORD=<secret>                     \
+#   DB_NAME=mooder_stg                       \
+#   OIDC_SERVER_URL=https://mooder-stg.eu.auth0.com/ \
+#   OIDC_CLIENT_ID=mooder-backend            \
+#   OIDC_CLIENT_SECRET=<secret>              \
+#   OTEL_EXPORTER_OTLP_ENDPOINT=https://otlp-gateway-prod-eu-west-0.grafana.net/otlp
