@@ -4,7 +4,7 @@ COPY package.json ./
 # npm install generates the lockfile during image build.
 # Once you run `npm install` locally and commit package-lock.json,
 # switch this to `npm ci --frozen-lockfile` for reproducible builds.
-RUN npm install
+RUN npm ci --frozen-lockfile
 
 FROM node:20-alpine AS builder
 WORKDIR /app
