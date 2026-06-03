@@ -38,3 +38,6 @@ Thumbs.db
 # ── Docker volumes (if accidentally created locally) ──────
 postgres-data/
 grafana-data/
+
+# ── Local dev overrides (contains secrets / machine-specific paths) ──────────
+docker-compose.override.yml

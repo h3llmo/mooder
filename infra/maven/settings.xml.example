@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Maven settings template for corporate Artifactory proxy.
+  Copy this file to the location referenced by MAVEN_SETTINGS in your
+  docker-compose.override.yml (e.g. C:\dev\tools\apache-maven-X.Y.Z\conf\settings.xml)
+  and fill in your credentials. Do NOT commit the file with real credentials.
+-->
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 http://maven.apache.org/xsd/settings-1.2.0.xsd">
+  <servers>
+    <server>
+      <id>central</id>
+      <username>YOUR_ARTIFACTORY_USERNAME</username>
+      <password>YOUR_ARTIFACTORY_TOKEN</password>
+    </server>
+    <server>
+      <id>snapshots</id>
+      <username>YOUR_ARTIFACTORY_USERNAME</username>
+      <password>YOUR_ARTIFACTORY_TOKEN</password>
+    </server>
+  </servers>
+  <profiles>
+    <profile>
+      <id>artifactory</id>
+      <repositories>
+        <repository>
+          <id>central</id>
+          <name>Artifactory releases</name>
+          <url>https://artifacts-central.pwc.com/artifactory/c00060-pwc-lu-ifs-releases-maven</url>
+          <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+        <repository>
+          <id>snapshots</id>
+          <name>Artifactory snapshots</name>
+          <url>https://artifacts-central.pwc.com/artifactory/c00060-pwc-lu-ifs-snapshots-maven</url>
+          <snapshots/>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>central</id>
+          <name>Artifactory releases</name>
+          <url>https://artifacts-central.pwc.com/artifactory/c00060-pwc-lu-ifs-releases-maven</url>
+          <snapshots><enabled>false</enabled></snapshots>
+        </pluginRepository>
+        <pluginRepository>
+          <id>snapshots</id>
+          <name>Artifactory snapshots</name>
+          <url>https://artifacts-central.pwc.com/artifactory/c00060-pwc-lu-ifs-snapshots-maven</url>
+          <snapshots/>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <activeProfile>artifactory</activeProfile>
+  </activeProfiles>
+</settings>

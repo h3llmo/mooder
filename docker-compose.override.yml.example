@@ -1,0 +1,29 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Local developer overrides — NOT committed (see .gitignore)
+#
+# Passes corporate credentials as BuildKit secrets so Docker builds can
+# authenticate against Artifactory for both npm (frontend) and Maven (backend).
+#
+# Before running docker compose on Windows, set the env vars:
+#   $env:NPMRC_FILE     = "$env:USERPROFILE\.npmrc"
+#   $env:MAVEN_SETTINGS = "C:\dev\tools\apache-maven-3.8.6\conf\settings.xml"
+#   (adjust MAVEN_SETTINGS to your actual Maven installation path)
+#
+# See infra/maven/settings.xml.example for the expected settings.xml format.
+# ─────────────────────────────────────────────────────────────────────────────
+
+secrets:
+  npmrc:
+    file: ${NPMRC_FILE}
+  maven_settings:
+    file: ${MAVEN_SETTINGS}
+
+services:
+  frontend:
+    build:
+      secrets:
+        - npmrc
+  backend:
+    build:
+      secrets:
+        - maven_settings

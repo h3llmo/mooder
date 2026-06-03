@@ -4,13 +4,15 @@ WORKDIR /build
 COPY pom.xml ./
 COPY mooder-api/pom.xml mooder-api/
 COPY mooder-impl/pom.xml mooder-impl/
-RUN mvn dependency:go-offline -q
+RUN --mount=type=secret,id=maven_settings,target=/root/.m2/settings.xml \
+    mvn dependency:go-offline -q
 # Build
 COPY . .
-RUN mvn -pl mooder-impl -am package -DskipTests -q
+RUN --mount=type=secret,id=maven_settings,target=/root/.m2/settings.xml \
+    mvn -pl mooder-impl -am package -DskipTests -q
 
 FROM eclipse-temurin:21-jre-alpine
-RUN apk add --no-cache curl
+# wget is provided by busybox (Alpine base) — no apk install needed
 WORKDIR /app
 COPY --from=builder /build/mooder-impl/target/quarkus-app /app
 EXPOSE 8080

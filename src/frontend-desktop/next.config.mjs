@@ -1,6 +1,5 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   // Rewrites: in docker, API calls from the browser go to nginx (/api/...)
   // which proxies to the backend. In standalone dev (no docker), point to
   // the backend directly via MOODER_API_URL.

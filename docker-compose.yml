@@ -84,7 +84,7 @@ services:
     networks:
       - mooder-network
     healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://localhost:8080/q/health/ready || exit 1"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/q/health/ready 2>&1 | grep -q UP || exit 1"]
       interval: 15s
       timeout: 5s
       retries: 10
