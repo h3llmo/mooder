@@ -104,6 +104,7 @@ services:
         -U ${DB_USER:-mooder}
         -d ${DB_NAME:-mooder}
         -f /seed/seed.sql
+        -f /seed/seed_alice_thomas_convo.sql
     volumes:
       - ./mock-data/resources:/seed:ro
     depends_on:
