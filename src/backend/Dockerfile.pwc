@@ -4,10 +4,14 @@ WORKDIR /build
 COPY pom.xml ./
 COPY mooder-api/pom.xml mooder-api/
 COPY mooder-impl/pom.xml mooder-impl/
-RUN mvn dependency:go-offline -q
+# Mount corporate Maven settings.xml as a BuildKit secret (credentials never stored in image).
+# Secret is injected via docker-compose.override.yml (see project root).
+RUN --mount=type=secret,id=maven_settings,target=/root/.m2/settings.xml \
+    mvn dependency:go-offline -q
 # Build
 COPY . .
-RUN mvn -pl mooder-impl -am package -DskipTests -q
+RUN --mount=type=secret,id=maven_settings,target=/root/.m2/settings.xml \
+    mvn -pl mooder-impl -am package -DskipTests -q
 
 FROM eclipse-temurin:21-jre-alpine
 # wget is provided by busybox (Alpine base) — no apk install needed

@@ -2,10 +2,10 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY . .
-# package-lock.json may contain corporate Artifactory resolved URLs.
-# Rewrite them to the public npm registry so this image builds anywhere.
-RUN sed -i 's|https://artifacts-central\.pwc\.com/artifactory/api/npm/[^\"]*|https://registry.npmjs.org/|g' package-lock.json \
-    && npm ci --frozen-lockfile && npm run build
+# Mount ~/.npmrc as a BuildKit secret so Artifactory credentials are never stored in the image.
+# Secret is injected via docker-compose.override.yml (see project root).
+RUN --mount=type=secret,id=npmrc,target=/root/.npmrc \
+    npm ci --frozen-lockfile && npm run build
 
 FROM node:20-alpine AS runner
 WORKDIR /app
